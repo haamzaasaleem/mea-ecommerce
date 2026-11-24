@@ -43,6 +43,16 @@
     wa: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>',
   };
 
+  /* ---------- product options ---------- */
+  // a value is "M" or { label: "Raw Silk", add: 4000 }
+  const optVal = (v) => (typeof v === "string" ? { label: v, add: 0 } : { label: v.label, add: v.add || 0 });
+  const addOn = (p, sel) => (p.options || []).reduce((sum, o) => {
+    const v = o.values.map(optVal).find((x) => x.label === sel[o.name]);
+    return sum + (v ? v.add : 0);
+  }, 0);
+  const unitPrice = (p, sel) => p.price + addOn(p, sel);
+  const optText = (sel) => Object.entries(sel).map(([k, v]) => `${k}: ${v}`).join(" · ");
+
   /* ---------- product card ---------- */
   function cardHTML(p, opts = {}) {
     const alt = p.images[1] ? `<img class="alt" src="${p.images[1]}" alt="" loading="lazy">` : "";
@@ -50,9 +60,14 @@
       ? '<span class="card__badge">Sold out</span>'
       : p.compare ? `<span class="card__badge card__badge--sale">-${Math.round((1 - p.price / p.compare) * 100)}%</span>`
       : p.tags.includes("new") ? '<span class="card__badge">New</span>' : "";
-    const quick = p.available
-      ? `<div class="card__quick"><small>Quick add</small><div class="card__sizes">${p.sizes.map((s) => `<button type="button" data-add="${p.id}" data-size="${esc(s)}">${esc(s)}</button>`).join("")}</div></div>`
-      : "";
+    const o = p.options || [];
+    const single = o.length === 1 && o[0].type === "size" && o[0].values.every((v) => !optVal(v).add);
+    const quick = !p.available ? ""
+      : o.length === 0
+        ? `<div class="card__quick"><button type="button" class="card__quick-btn" data-add="${p.id}" data-sel="{}">Add to bag</button></div>`
+        : single
+          ? `<div class="card__quick"><small>Quick add</small><div class="card__sizes">${o[0].values.map(optVal).map((v) => `<button type="button" data-add="${p.id}" data-sel="${esc(JSON.stringify({ [o[0].name]: v.label }))}">${esc(v.label)}</button>`).join("")}</div></div>`
+          : `<div class="card__quick"><a class="card__quick-btn" href="product.html?id=${p.id}">Choose ${esc(o.map((x) => x.name.replace(/ size$/i, "").toLowerCase()).join(", ").replace(/, ([^,]*)$/, " & $1"))}</a></div>`;
     return `<article class="card${p.available ? "" : " is-soldout"}${opts.reveal === false ? "" : " reveal"}">
       <div class="card__frame"><a class="card__media" href="product.html?id=${p.id}" aria-label="${esc(p.title)}">
         <img src="${p.images[0]}" alt="${esc(p.title)}" loading="lazy">${alt}${badge}
@@ -193,13 +208,25 @@
     <a class="whatsapp" href="https://wa.me/${WHATSAPP}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">${ICON.wa}</a>
     <div class="modal" id="sizeModal" aria-hidden="true"><div class="modal__backdrop" data-close></div><div class="modal__box" data-lenis-prevent role="dialog" aria-label="Size guide">
       <button class="icon-btn modal__close" data-close aria-label="Close">${ICON.close}</button>
-      <h3>Size Guide</h3><p class="note">All measurements are in inches. Shirt lengths may vary by style.</p>
-      <div class="table-wrap"><table class="sizes-table"><thead><tr><th>Size</th><th>Bust</th><th>Waist</th><th>Hip</th><th>Shirt length</th><th>Pant length</th></tr></thead><tbody>
-        <tr><td>XS</td><td>19</td><td>15</td><td>19</td><td>44</td><td>36</td></tr>
-        <tr><td>S</td><td>20</td><td>16</td><td>20</td><td>44</td><td>36</td></tr>
-        <tr><td>M</td><td>21.5</td><td>17.5</td><td>21.5</td><td>45</td><td>37</td></tr>
-        <tr><td>L</td><td>23</td><td>19</td><td>23</td><td>45</td><td>37</td></tr>
-        <tr><td>XL</td><td>25</td><td>21</td><td>25</td><td>46</td><td>38</td></tr>
+      <h3>Size Guide</h3><p class="note">All measurements are in inches, taken flat. Lengths may vary by style.</p>
+      <div class="guide-tabs" role="tablist"><button type="button" role="tab" data-guide="shirt" class="is-active">Shirt</button><button type="button" role="tab" data-guide="pants">Pants</button></div>
+      <div class="table-wrap" data-chart="shirt"><table class="sizes-table"><thead><tr><th>Size</th><th>Shoulder</th><th>Bust</th><th>Waist</th><th>Hip</th><th>Length</th></tr></thead><tbody>
+        <tr><td>XS</td><td>13.5</td><td>18</td><td>16</td><td>19</td><td>44</td></tr>
+        <tr><td>S</td><td>14</td><td>19</td><td>17</td><td>20</td><td>44</td></tr>
+        <tr><td>S/M</td><td>14</td><td>20</td><td>18</td><td>21</td><td>45</td></tr>
+        <tr><td>M</td><td>14.5</td><td>21</td><td>19</td><td>22</td><td>45</td></tr>
+        <tr><td>M/L</td><td>15</td><td>22</td><td>20</td><td>23</td><td>45</td></tr>
+        <tr><td>L</td><td>15.5</td><td>23.5</td><td>21.5</td><td>24.5</td><td>46</td></tr>
+        <tr><td>XL</td><td>16</td><td>25</td><td>23</td><td>26</td><td>46</td></tr>
+      </tbody></table></div>
+      <div class="table-wrap" data-chart="pants" hidden><table class="sizes-table"><thead><tr><th>Size</th><th>Waist</th><th>Hip</th><th>Thigh</th><th>Hem</th><th>Length</th></tr></thead><tbody>
+        <tr><td>XS</td><td>12</td><td>18</td><td>11.5</td><td>5.5</td><td>36</td></tr>
+        <tr><td>S</td><td>13</td><td>20</td><td>12</td><td>5.5</td><td>36</td></tr>
+        <tr><td>S/M</td><td>13.5</td><td>20.5</td><td>12.5</td><td>6</td><td>36</td></tr>
+        <tr><td>M</td><td>14</td><td>21</td><td>13</td><td>6</td><td>37</td></tr>
+        <tr><td>M/L</td><td>14.5</td><td>22</td><td>13.5</td><td>6.5</td><td>37</td></tr>
+        <tr><td>L</td><td>15.5</td><td>24</td><td>14</td><td>7</td><td>37</td></tr>
+        <tr><td>XL</td><td>16.5</td><td>26</td><td>15</td><td>7.5</td><td>38</td></tr>
       </tbody></table></div>
     </div></div>`;
 
@@ -322,7 +349,9 @@
   }
 
   /* ---------- cart ---------- */
-  let cart = store.get("mea_cart", []).filter((i) => byId(i.id));
+  let cart = store.get("mea_cart", [])
+    .filter((i) => byId(i.id))
+    .map((i) => (i.sel ? i : { id: i.id, qty: i.qty, sel: i.size ? { Size: i.size } : {} })); // older saved bags
   function saveCart() { store.set("mea_cart", cart); updateCount(); }
   function updateCount() {
     const n = cart.reduce((a, i) => a + i.qty, 0);
@@ -330,13 +359,14 @@
     el.textContent = n;
     el.classList.toggle("has-items", n > 0);
   }
-  function addToCart(id, size, qty = 1) {
+  function addToCart(id, sel = {}, qty = 1) {
     const p = byId(id);
     if (!p || !p.available) return;
-    const ex = cart.find((i) => i.id === id && i.size === size);
-    if (ex) ex.qty += qty; else cart.push({ id, size, qty });
+    const key = JSON.stringify(sel);
+    const ex = cart.find((i) => i.id === id && JSON.stringify(i.sel) === key);
+    if (ex) ex.qty += qty; else cart.push({ id, sel, qty });
     saveCart();
-    toast(`${p.title} (${size}) added to your bag`, { label: "View bag", fn: () => open("cart") });
+    toast(`${p.title} added to your bag`, { label: "View bag", fn: () => open("cart") });
   }
   function renderCart() {
     const body = $("#cartBody"), foot = $("#cartFoot");
@@ -345,7 +375,7 @@
       foot.innerHTML = "";
       return;
     }
-    const total = cart.reduce((a, i) => a + byId(i.id).price * i.qty, 0);
+    const total = cart.reduce((a, i) => a + unitPrice(byId(i.id), i.sel) * i.qty, 0);
     const left = Math.max(0, FREE_SHIP - total);
     body.innerHTML = `<div class="ship-meter">${left ? `You're <b>${money(left)}</b> away from free delivery` : "You've unlocked <b>free delivery</b>"}
       <div class="ship-meter__bar"><span style="width:${Math.min(100, (total / FREE_SHIP) * 100)}%"></span></div></div>` +
@@ -354,7 +384,7 @@
         return `<div class="cart-item">
           <a href="product.html?id=${p.id}"><img src="${p.images[0]}" alt="${esc(p.title)}"></a>
           <div><h4><a href="product.html?id=${p.id}">${esc(p.title)}</a></h4>
-            <div class="meta">Size ${esc(i.size)} · ${money(p.price)}</div>
+            <div class="meta">${Object.keys(i.sel).length ? esc(optText(i.sel)) + "<br>" : ""}${money(unitPrice(p, i.sel))}</div>
             <div class="cart-item__row">
               <div class="qty"><button type="button" data-qty="${idx}" data-d="-1" aria-label="Decrease">−</button><span>${i.qty}</span><button type="button" data-qty="${idx}" data-d="1" aria-label="Increase">+</button></div>
               <button type="button" class="remove" data-remove="${idx}">Remove</button>
@@ -363,6 +393,11 @@
     foot.innerHTML = `<div class="subtotal"><span>Subtotal</span><span>${money(total)}</span></div>
       <p class="note">Shipping & taxes calculated at checkout.</p>
       <button type="button" class="btn btn--solid btn--block" data-toast="Checkout connects to the payment gateway at launch.">Checkout</button>`;
+  }
+
+  function showGuide(which) {
+    $$(".guide-tabs button").forEach((b) => b.classList.toggle("is-active", b.dataset.guide === which));
+    $$("[data-chart]").forEach((c) => (c.hidden = c.dataset.chart !== which));
   }
 
   /* ---------- search ---------- */
@@ -382,11 +417,12 @@
   /* ---------- global events ---------- */
   function bindGlobal() {
     document.addEventListener("click", (e) => {
-      const t = e.target.closest("[data-open],[data-close],[data-add],[data-qty],[data-remove],[data-toast],[data-q],#overlay");
+      const t = e.target.closest("[data-open],[data-close],[data-add],[data-qty],[data-remove],[data-toast],[data-q],[data-guide],#overlay");
       if (!t) return;
-      if (t.dataset.open) { e.preventDefault(); open(t.dataset.open); }
+      if (t.dataset.open) { e.preventDefault(); open(t.dataset.open); if (t.dataset.guide) showGuide(t.dataset.guide); }
+      else if (t.dataset.guide) showGuide(t.dataset.guide);
       else if (t.hasAttribute("data-close") || t.id === "overlay") close();
-      else if (t.dataset.add) { e.preventDefault(); addToCart(t.dataset.add, t.dataset.size); }
+      else if (t.dataset.add) { e.preventDefault(); addToCart(t.dataset.add, JSON.parse(t.dataset.sel || "{}")); }
       else if (t.dataset.qty) { const i = cart[+t.dataset.qty]; i.qty += +t.dataset.d; if (i.qty < 1) cart.splice(+t.dataset.qty, 1); saveCart(); renderCart(); }
       else if (t.dataset.remove) { cart.splice(+t.dataset.remove, 1); saveCart(); renderCart(); }
       else if (t.dataset.toast) { e.preventDefault(); toast(t.dataset.toast); }
@@ -591,7 +627,8 @@
   function initProduct() {
     const p = byId(params.get("id")) || PRODUCTS[0];
     document.title = `${p.title} | MEA`;
-    let size = null, qty = 1, active = 0;
+    let qty = 1, active = 0;
+    const sel = {};
     const details = p.details.filter((d) => !/^model/i.test(d));
     const model = p.details.find((d) => /^model/i.test(d));
     const rest = PRODUCTS.filter((x) => x.id !== p.id);
@@ -609,18 +646,21 @@
         <nav class="crumbs"><a href="index.html">Home</a><span>/</span><a href="shop.html?fabric=${encodeURIComponent(p.fabric)}">${esc(p.fabric)}</a><span>/</span>${esc(p.title)}</nav>
         <span class="eyebrow">${esc(p.fabric)}${p.tags.includes("new") ? " · New In" : ""}</span>
         <h1 class="pdp__title" style="margin-top:12px">${esc(p.title)}</h1>
-        <div class="pdp__price">${p.compare ? `<span class="sale">${money(p.price)}</span><s>${money(p.compare)}</s>` : money(p.price)}</div>
+        <div class="pdp__price" id="pdpPrice"></div>
         <p class="pdp__tax">Tax included. Shipping calculated at checkout.</p>
         ${p.available ? `
-        <div class="pdp__label"><span>Size${p.sizes.length ? ': <b id="sizeLabel" style="font-weight:400;color:var(--accent)">Select</b>' : ""}</span><button type="button" data-open="sizeModal">Size guide</button></div>
-        <div class="sizes" id="sizes">${p.sizes.map((s) => `<button type="button" data-s="${esc(s)}">${esc(s)}</button>`).join("")}</div>
+        ${p.options.map((o, gi) => `
+        <div class="opt" data-g="${gi}">
+          <div class="pdp__label"><span>${esc(o.name)}: <b class="opt__sel">Select</b></span>${o.guide ? `<button type="button" data-open="sizeModal" data-guide="${o.guide}">Size guide</button>` : ""}</div>
+          <div class="${o.type === "size" ? "sizes" : "opt-choices"}">${o.values.map(optVal).map((v) => `<button type="button" data-v="${esc(v.label)}">${esc(v.label)}${v.add && o.type !== "size" ? `<small>+ ${money(v.add)}</small>` : ""}</button>`).join("")}</div>
+        </div>`).join("")}
         <div class="pdp__buy">
           <div class="qty"><button type="button" id="qMinus" aria-label="Decrease">−</button><span id="qVal">1</span><button type="button" id="qPlus" aria-label="Increase">+</button></div>
-          <button type="button" class="btn btn--solid" id="addBtn">Add to bag · ${money(p.price)}</button>
+          <button type="button" class="btn btn--solid" id="addBtn">Add to bag</button>
         </div>` : `
         <button type="button" class="btn btn--block" disabled style="margin-bottom:10px">Sold out</button>
         <button type="button" class="btn btn--solid btn--block" style="margin-bottom:10px" data-toast="We'll email you when it's back.">Notify me when available</button>`}
-        <a class="btn btn--wa" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hi MEA, I'd like to order the " + p.title)}" target="_blank" rel="noopener">${ICON.wa} Order on WhatsApp</a>
+        <a class="btn btn--wa" id="waBtn" href="https://wa.me/${WHATSAPP}" target="_blank" rel="noopener">${ICON.wa} Order on WhatsApp</a>
         <div class="perks">
           <div>${ICON.truck}Free delivery over Rs. 15k</div>
           <div>${ICON.swap}7-day exchange</div>
@@ -656,26 +696,41 @@
       dots.forEach((d, j) => d.classList.toggle("is-active", j === i));
     }, { passive: true });
 
-    // buy box
+    // buy box: price, WhatsApp text and button follow the selected options
+    const refresh = () => {
+      const extra = addOn(p, sel), now = p.price + extra;
+      $("#pdpPrice").innerHTML = p.compare ? `<span class="sale">${money(now)}</span><s>${money(p.compare + extra)}</s>` : money(now);
+      const chosen = Object.keys(sel).length ? ` (${optText(sel)})` : "";
+      $("#waBtn").href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hi MEA, I'd like to order the ${p.title}${chosen}, quantity ${qty}.`)}`;
+      if ($("#addBtn")) $("#addBtn").textContent = `Add to bag · ${money(now * qty)}`;
+    };
     if (p.available) {
-      $("#sizes").addEventListener("click", (e) => {
-        const b = e.target.closest("button"); if (!b) return;
-        size = b.dataset.s;
-        $$("#sizes button").forEach((x) => x.classList.toggle("is-active", x === b));
-        $("#sizeLabel").textContent = size;
-      });
-      const setQ = (n) => { qty = Math.max(1, Math.min(10, n)); $("#qVal").textContent = qty; $("#addBtn").textContent = `Add to bag · ${money(p.price * qty)}`; };
+      $$(".opt").forEach((g) => g.addEventListener("click", (e) => {
+        const b = e.target.closest("button[data-v]"); if (!b) return;
+        const o = p.options[+g.dataset.g], v = o.values.map(optVal).find((x) => x.label === b.dataset.v);
+        sel[o.name] = v.label;
+        $$("button[data-v]", g).forEach((x) => x.classList.toggle("is-active", x === b));
+        $(".opt__sel", g).textContent = v.label + (v.add ? ` (+ ${money(v.add)})` : "");
+        g.classList.remove("is-missing");
+        refresh();
+      }));
+      const setQ = (n) => { qty = Math.max(1, Math.min(10, n)); $("#qVal").textContent = qty; refresh(); };
       $("#qMinus").onclick = () => setQ(qty - 1);
       $("#qPlus").onclick = () => setQ(qty + 1);
       $("#addBtn").onclick = () => {
-        if (!size) {
-          const s = $("#sizes"); s.classList.remove("shake"); void s.offsetWidth; s.classList.add("shake");
-          toast("Please select a size first");
+        const gi = p.options.findIndex((o) => !sel[o.name]);
+        if (gi > -1) {
+          const g = $(`.opt[data-g="${gi}"]`), box = g.lastElementChild;
+          g.classList.add("is-missing");
+          box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake");
+          toast(`Please select ${p.options[gi].name.toLowerCase()}`);
           return;
         }
-        addToCart(p.id, size, qty);
+        // keep the selections in the product's own option order
+        addToCart(p.id, Object.fromEntries(p.options.map((o) => [o.name, sel[o.name]])), qty);
       };
     }
+    refresh();
 
     $("#relatedTrack").innerHTML = related.map((x) => cardHTML(x)).join("");
   }

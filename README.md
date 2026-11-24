@@ -19,7 +19,7 @@ Then visit http://localhost:8000.
 | --- | --- |
 | `index.html` | About MEA hero (no slideshow), New Arrivals grid, Shop by Fabric carousel, Winter Edit campaign banner, Best Sellers carousel, Our Story with Everyday/Evening tiles, As Seen On, Journal, service promises, footer with newsletter |
 | `shop.html` | Collection page: banner, sticky toolbar (filters drawer, sort, 2/3/4 column toggle), collection tabs. Supports `?c=new\|bestseller\|everyday\|evening` and `?fabric=Velvet` |
-| `product.html?id=…` | Gallery with thumbnails + hover zoom (swipe on mobile), size picker, quantity, add to bag, WhatsApp order, size guide, accordions, related products |
+| `product.html?id=…` | Gallery with thumbnails + hover zoom (swipe on mobile), per-product options (shirt size, pants size, fabric, dupatta, with price add-ons), quantity, add to bag, WhatsApp order with the chosen options, shirt & pants size guide, accordions, related products |
 
 Shared on every page: announcement marquee, mega menu, mobile menu, live search, cart drawer (saved in localStorage) with a free-delivery meter, WhatsApp button.
 
@@ -34,8 +34,19 @@ Motion: smooth inertia scrolling ([Lenis](https://github.com/darkroomengineering
 - `js/logo.js`, `assets/img/mea-logo.svg`: MEA wordmark vectorised from the supplied logo
 - `assets/products/`: product photos
 
+## Editing product options
+
+Each product in `js/products.js` has an `options` list; every entry becomes one selector on the product page, in that order. Leave it empty (`[]`) for a product with no choices. Instructions and examples are at the top of that file.
+
+```js
+{ "name": "Shirt size", "type": "size",   "guide": "shirt", "values": ["S", "M", "L"] }
+{ "name": "Pants size", "type": "size",   "guide": "pants", "values": ["XS", "S", "M"] }
+{ "name": "Fabric",     "type": "fabric", "values": ["Karandi", { "label": "Raw Silk", "add": 4000 }] }
+```
+
 ## ⚠️ Before launch
 
 - **Product names, descriptions and photos are placeholders taken from sakatelier.com and lirastudioofficial.com** for this demo only. Replace them with MEA's own catalogue and photography.
 - Placeholder contact details, WhatsApp number (`WHATSAPP` in `js/app.js`), social links and "As Seen On" handles.
 - Checkout, accounts, policy pages and journal are stubs (they show a toast).
+- Size-guide measurements and the demo fabric choices/add-on prices are placeholders; replace with MEA's own.

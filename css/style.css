@@ -667,3 +667,26 @@ table.sizes-table { width: 100%; border-collapse: collapse; font-size: 13px; mar
   .about-hero { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
 }
 .header--overlay:not(.is-solid) .currency { color: var(--text); text-shadow: 0 1px 8px rgba(0,0,0,.5); }
+
+/* ---------- Product options (shirt / pants / fabric / dupatta) ---------- */
+.opt .sizes, .opt .opt-choices { margin-bottom: 24px; }
+.opt-choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.opt-choices button {
+  display: inline-flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px;
+  min-height: 48px; padding: 8px 18px; border: 1px solid var(--line-strong);
+  font-size: 13px; letter-spacing: .04em; text-align: left;
+  transition: background .25s, color .25s, border-color .25s;
+}
+.opt-choices button small { font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+.opt-choices button:hover { border-color: var(--text); }
+.opt-choices button.is-active { background: var(--text); color: var(--bg); border-color: var(--text); }
+.opt-choices button.is-active small { color: rgba(13,11,9,.65); }
+.opt-choices.shake { animation: shake .4s; }
+.opt.is-missing .opt__sel { color: var(--danger) !important; }
+.opt.is-missing .sizes button, .opt.is-missing .opt-choices button { border-color: rgba(212,138,122,.6); }
+.opt__sel { font-weight: 400; color: var(--accent); text-transform: none; letter-spacing: .04em; }
+.guide-tabs { display: flex; gap: 0; margin-top: 18px; border-bottom: 1px solid var(--line); }
+.guide-tabs button { padding: 10px 18px; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid transparent; margin-bottom: -1px; }
+.guide-tabs button.is-active { color: var(--text); border-color: var(--accent); }
+.card__quick-btn { display: block; width: 100%; padding: 8px 4px; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; transition: color .3s; }
+.card__quick-btn:hover { color: var(--accent); }
