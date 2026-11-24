@@ -96,7 +96,7 @@
               </div></div>
             </li>
             <li><a href="shop.html?c=new">New In</a></li>
-            <li><a href="index.html#atelier">The Atelier</a></li>
+            <li><a href="index.html#story">Our Story</a></li>
             <li><a href="index.html#journal">Journal</a></li>
           </ul>
         </div>
@@ -110,7 +110,7 @@
       </div>
     </header>
 
-    <div class="search" id="search" aria-hidden="true">
+    <div class="search" id="search" aria-hidden="true" data-lenis-prevent>
       <div class="container">
         <form class="search__bar" role="search" onsubmit="return false">
           ${ICON.search.replace("<svg", '<svg width="22" height="22" stroke="currentColor" fill="none" stroke-width="1.3"')}
@@ -123,7 +123,7 @@
 
     <aside class="drawer drawer--left" id="menu" aria-label="Menu">
       <div class="drawer__head"><h3>Menu</h3><button class="icon-btn" data-close aria-label="Close menu">${ICON.close}</button></div>
-      <div class="drawer__body mnav">
+      <div class="drawer__body mnav" data-lenis-prevent>
         <a href="index.html">Home</a>
         <details open><summary>Shop</summary>
           <a href="shop.html?c=new">New Arrivals</a><a href="shop.html?c=bestseller">Best Sellers</a>
@@ -132,7 +132,7 @@
         <details><summary>Fabrics</summary>
           ${fabrics.map((f) => `<a href="shop.html?fabric=${encodeURIComponent(f)}">${f}</a>`).join("")}
         </details>
-        <a href="index.html#atelier">The Atelier</a>
+        <a href="index.html#story">Our Story</a>
         <a href="index.html#journal">Journal</a>
         <a href="#" data-toast="Customer accounts are switched on at launch.">Account</a>
       </div>
@@ -143,7 +143,7 @@
 
     <aside class="drawer drawer--right" id="cart" aria-label="Shopping bag">
       <div class="drawer__head"><h3>Your Bag</h3><button class="icon-btn" data-close aria-label="Close bag">${ICON.close}</button></div>
-      <div class="drawer__body" id="cartBody"></div>
+      <div class="drawer__body" id="cartBody" data-lenis-prevent></div>
       <div class="drawer__foot" id="cartFoot"></div>
     </aside>
 
@@ -170,7 +170,7 @@
           </div>
           <div>
             <h4>MEA</h4>
-            <ul><li><a href="index.html#atelier">The Atelier</a></li><li><a href="shop.html?c=new">New Arrivals</a></li><li><a href="shop.html?c=bestseller">Best Sellers</a></li><li><a href="index.html#journal">Journal</a></li><li><a href="#" data-toast="Gift cards are added at launch.">Gift Card</a></li></ul>
+            <ul><li><a href="index.html#about">About MEA</a></li><li><a href="index.html#story">Our Story</a></li><li><a href="shop.html?c=new">New Arrivals</a></li><li><a href="shop.html?c=bestseller">Best Sellers</a></li><li><a href="index.html#journal">Journal</a></li><li><a href="#" data-toast="Gift cards are added at launch.">Gift Card</a></li></ul>
           </div>
           <div>
             <h4>Policies</h4>
@@ -191,7 +191,7 @@
       </div>
     </footer>
     <a class="whatsapp" href="https://wa.me/${WHATSAPP}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">${ICON.wa}</a>
-    <div class="modal" id="sizeModal" aria-hidden="true"><div class="modal__backdrop" data-close></div><div class="modal__box" role="dialog" aria-label="Size guide">
+    <div class="modal" id="sizeModal" aria-hidden="true"><div class="modal__backdrop" data-close></div><div class="modal__box" data-lenis-prevent role="dialog" aria-label="Size guide">
       <button class="icon-btn modal__close" data-close aria-label="Close">${ICON.close}</button>
       <h3>Size Guide</h3><p class="note">All measurements are in inches. Shirt lengths may vary by style.</p>
       <div class="table-wrap"><table class="sizes-table"><thead><tr><th>Size</th><th>Bust</th><th>Waist</th><th>Hip</th><th>Shirt length</th><th>Pant length</th></tr></thead><tbody>
@@ -207,6 +207,85 @@
     document.body.insertAdjacentHTML("beforeend", footerHTML);
   }
 
+  /* ---------- smooth scroll (Lenis) ---------- */
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let lenis = null;
+  const scrollFns = [];
+  // page position of an anchor target, measured from the real scroll position, minus the header
+  const anchorY = (el) => el.getBoundingClientRect().top + scrollY - ($("#header") ? $("#header").offsetHeight : 0);
+  function initSmooth() {
+    if (!reduceMotion && window.Lenis) {
+      lenis = new Lenis({ duration: 1.15, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+      lenis.on("scroll", () => scrollFns.forEach((f) => f()));
+      const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+      requestAnimationFrame(raf);
+    } else {
+      addEventListener("scroll", () => scrollFns.forEach((f) => f()), { passive: true });
+    }
+    // in-page anchors glide to their section
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest('a[href*="#"]');
+      if (!a) return;
+      const url = new URL(a.href, location.href);
+      if (url.pathname !== location.pathname || !url.hash || url.hash === "#") return;
+      const target = document.querySelector(url.hash);
+      if (!target) return;
+      e.preventDefault();
+      close();
+      if (lenis) { lenis.resize(); lenis.scrollTo(anchorY(target), { duration: 1.4 }); }
+      else target.scrollIntoView({ behavior: "smooth" });
+    });
+    // arriving with a hash from another page
+    if (location.hash && document.querySelector(location.hash)) {
+      const jump = () => {
+        const y = anchorY(document.querySelector(location.hash));
+        if (lenis) { lenis.resize(); lenis.scrollTo(y, { immediate: true, force: true }); }
+        else scrollTo(0, y);
+      };
+      setTimeout(jump, 60);
+      if (document.readyState === "complete") setTimeout(jump, 300);
+      else addEventListener("load", () => setTimeout(jump, 50));
+    }
+  }
+
+  /* ---------- parallax ---------- */
+  function initParallax() {
+    if (reduceMotion) return;
+    const els = $$("[data-parallax]");
+    if (!els.length) return;
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const vh = innerHeight;
+      els.forEach((el) => {
+        const box = el.parentElement.getBoundingClientRect();
+        if (box.bottom < -100 || box.top > vh + 100) return;
+        const room = box.height * 0.055; // scale(1.12) leaves ~6% spare on each side
+        const shift = Math.max(-room, Math.min(room, (box.top + box.height / 2 - vh / 2) * parseFloat(el.dataset.parallax)));
+        el.style.transform = `translate3d(0, ${shift.toFixed(1)}px, 0) scale(1.12)`;
+      });
+    };
+    scrollFns.push(() => { if (!ticking) { ticking = true; requestAnimationFrame(update); } });
+    addEventListener("resize", update);
+    update();
+  }
+
+  /* ---------- page transitions ---------- */
+  function initTransitions() {
+    requestAnimationFrame(() => document.documentElement.classList.add("is-ready"));
+    addEventListener("pageshow", (e) => { if (e.persisted) document.documentElement.classList.remove("is-leaving"); });
+    if (reduceMotion) return;
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest("a[href]");
+      if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || a.target === "_blank" || a.hasAttribute("data-toast")) return;
+      const url = new URL(a.href, location.href);
+      if (url.origin !== location.origin || (url.pathname === location.pathname && url.search === location.search)) return;
+      e.preventDefault();
+      document.documentElement.classList.add("is-leaving");
+      setTimeout(() => { location.href = a.href; }, 380);
+    });
+  }
+
   /* ---------- open / close panels ---------- */
   let openPanel = null;
   function open(id) {
@@ -216,7 +295,7 @@
     el.classList.add("is-open");
     el.setAttribute("aria-hidden", "false");
     if (id !== "search" && id !== "sizeModal") $("#overlay").classList.add("is-open");
-    if (id !== "search") document.body.classList.add("no-scroll");
+    if (id !== "search") { document.body.classList.add("no-scroll"); if (lenis) lenis.stop(); }
     openPanel = el;
     if (id === "search") setTimeout(() => $("#searchInput").focus(), 300);
     if (id === "cart") renderCart();
@@ -227,6 +306,7 @@
     openPanel.setAttribute("aria-hidden", "true");
     $("#overlay").classList.remove("is-open");
     document.body.classList.remove("no-scroll");
+    if (lenis) lenis.start();
     openPanel = null;
   }
 
@@ -320,18 +400,33 @@
     const header = $("#header");
     if (header.classList.contains("header--overlay")) {
       const onScroll = () => header.classList.toggle("is-solid", scrollY > 40);
-      addEventListener("scroll", onScroll, { passive: true });
+      scrollFns.push(onScroll);
       onScroll();
     }
+    // tuck the header away when scrolling down, bring it back when scrolling up
+    let lastY = scrollY;
+    scrollFns.push(() => {
+      const y = scrollY;
+      const hide = y > lastY && y > 400 && !openPanel;
+      header.classList.toggle("is-hidden", hide);
+      document.documentElement.classList.toggle("header-hidden", hide);
+      lastY = y;
+    });
   }
 
   /* ---------- reveal on scroll ---------- */
   let io;
   function observeReveals() {
     if (!("IntersectionObserver" in window)) { $$(".reveal").forEach((el) => el.classList.add("is-in")); return; }
-    io = io || new IntersectionObserver((entries) => entries.forEach((en) => {
-      if (en.isIntersecting) { en.target.classList.add("is-in"); io.unobserve(en.target); }
-    }), { rootMargin: "0px 0px -8% 0px" });
+    io = io || new IntersectionObserver((entries) => {
+      // stagger items that enter together
+      entries.filter((en) => en.isIntersecting).forEach((en, i) => {
+        en.target.style.transitionDelay = `${Math.min(i, 6) * 90}ms`;
+        en.target.classList.add("is-in");
+        io.unobserve(en.target);
+        setTimeout(() => { en.target.style.transitionDelay = ""; }, 1600);
+      });
+    }, { rootMargin: "0px 0px -8% 0px" });
     $$(".reveal:not(.is-in)").forEach((el) => io.observe(el));
   }
 
@@ -359,40 +454,6 @@
      HOME
      ========================================================= */
   function initHome() {
-    // hero slideshow
-    const slides = [
-      { k: "Winter Edit '26", t: 'Made to<br><span class="italic">turn heads</span>', p: "Rich karandi, deep burgundies and slow-poured velvet. Pieces for every day of the season.", ids: [["burgundy-vesper-set", 0], ["gold-topaz-french-velvet-scallop-set", 1], ["olive-bronze-cowls-set", 1]], href: "shop.html?c=new", cta: "Shop New In" },
-      { k: "The Velvet Edit", t: 'After<br><span class="italic">dark</span>', p: "French velvet in jewel tones, cut to move and made for evenings that run late.", ids: [["pink-tourmaline-french-velvet-scallop-set", 0], ["navy-kelly-kaftaan", 1], ["feroza-french-velvet-scallop-set", 2]], href: "shop.html?fabric=Velvet", cta: "Shop Velvet" },
-      { k: "Quiet Neutrals", t: 'Soft<br><span class="italic">power</span>', p: "Champagne, oat and ivory. Everyday sets that do the talking for you.", ids: [["champagne-audrey-set", 3], ["mock-neck-set", 1], ["nude-mardana-kurta", 2]], href: "shop.html?c=everyday", cta: "Shop Everyday" },
-    ];
-    const hero = $("#hero");
-    hero.innerHTML = slides.map((s, i) => `
-      <div class="hero__slide${i === 0 ? " is-active" : ""}" aria-hidden="${i !== 0}">
-        <div class="hero__panels">${s.ids.map(([id, n], j) => `<img src="${img(id, n)}" alt="" ${i === 0 && j === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`).join("")}</div>
-        <div class="container hero__content"><div class="hero__copy">
-          <span class="eyebrow">${s.k}</span>
-          <h1 class="display">${s.t}</h1>
-          <p>${s.p}</p>
-          <a class="btn btn--solid" href="${s.href}">${s.cta}</a>
-        </div></div>
-      </div>`).join("") + `
-      <div class="container hero__content hero__controls-wrap"><div class="hero__controls">
-        <span class="hero__count" id="heroCount">01 / 03</span>
-        <div class="hero__dots">${slides.map((_, i) => `<button type="button" aria-label="Slide ${i + 1}" class="${i === 0 ? "is-active" : ""}"><span></span></button>`).join("")}</div>
-      </div></div>`;
-    const els = $$(".hero__slide", hero), dots = $$(".hero__dots button", hero);
-    let cur = 0, timer;
-    const go = (i) => {
-      els[cur].classList.remove("is-active"); els[cur].setAttribute("aria-hidden", "true"); dots[cur].classList.remove("is-active");
-      cur = (i + els.length) % els.length;
-      els[cur].classList.add("is-active"); els[cur].setAttribute("aria-hidden", "false");
-      void dots[cur].offsetWidth; dots[cur].classList.add("is-active");
-      $("#heroCount").textContent = `0${cur + 1} / 0${els.length}`;
-      clearTimeout(timer); timer = setTimeout(() => go(cur + 1), 6500);
-    };
-    dots.forEach((d, i) => d.addEventListener("click", () => go(i)));
-    timer = setTimeout(() => go(1), 6500);
-
     // new arrivals
     const fresh = PRODUCTS.filter((p) => p.tags.includes("new") && p.available).slice(0, 8);
     $("#newGrid").innerHTML = fresh.map((p) => cardHTML(p)).join("");
@@ -408,9 +469,6 @@
 
     // best sellers carousel
     $("#bestTrack").innerHTML = PRODUCTS.filter((p) => p.tags.includes("bestseller")).map((p) => cardHTML(p)).join("");
-
-    // editorial
-    $("#editorialMedia").innerHTML = `<img src="${img("velvet-mandarin-blazer", 2)}" alt="" loading="lazy"><img src="${img("mock-neck-set", 1)}" alt="" loading="lazy">`;
 
     // as seen on
     const seen = [["@ayeshak", "kendall-set-in-white", 1], ["@zarabakes", "mallow-set", 3], ["@noor.styles", "espresso-mardana-kurta", 1], ["@hiba.r", "burgundy-kendall-set", 0], ["@sanaxo", "aubergine-marlow-set", 2], ["@mahamq", "cognac-sable-set", 3]];
@@ -450,7 +508,7 @@
     document.body.insertAdjacentHTML("beforeend", `
       <aside class="drawer drawer--left" id="filters" aria-label="Filters">
         <div class="drawer__head"><h3>Filters</h3><button class="icon-btn" data-close aria-label="Close filters">${ICON.close}</button></div>
-        <div class="drawer__body">
+        <div class="drawer__body" data-lenis-prevent>
           <div class="filter-group"><h4>Fabric</h4>${fabrics.map((f) => `<label class="check"><input type="checkbox" name="fabric" value="${f}">${f}<em>${PRODUCTS.filter((p) => p.fabric === f).length}</em></label>`).join("")}</div>
           <div class="filter-group"><h4>Availability</h4><label class="check"><input type="checkbox" id="fStock">In stock only</label></div>
           <div class="filter-group"><h4>Price (Rs.)</h4><div class="range-row"><input type="number" id="fMin" placeholder="Min" min="0" inputmode="numeric"><input type="number" id="fMax" placeholder="Max" min="0" inputmode="numeric"></div></div>
@@ -624,12 +682,15 @@
 
   /* ---------- boot ---------- */
   renderChrome();
+  initTransitions();
   bindGlobal();
   updateCount();
   if (page === "home") initHome();
   if (page === "shop") initShop();
   if (page === "product") initProduct();
   bindCarousels();
+  initSmooth();
+  initParallax();
   observeReveals();
   window.MEA = { open, close, toast };
 })();
