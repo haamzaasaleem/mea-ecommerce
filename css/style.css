@@ -250,14 +250,8 @@ html.is-leaving body { opacity: 0; transition: opacity .38s var(--ease); }
 .about-hero__facts span { display: block; font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
 .about-hero__media { position: relative; }
 .about-hero__main { position: absolute; inset: 0; margin: 0; overflow: hidden; }
-.about-hero__main img, .about-hero__inset img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; transform: scale(1.12); will-change: transform; }
+.about-hero__main img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; transform: scale(1.12); will-change: transform; }
 .about-hero__main::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13,11,9,.45), transparent 22%, transparent 75%, rgba(13,11,9,.35)); pointer-events: none; }
-.about-hero__inset {
-  position: absolute; z-index: 2; margin: 0; overflow: hidden;
-  left: clamp(-100px, -6vw, -48px); bottom: 9%; width: clamp(150px, 13vw, 220px); aspect-ratio: 3/4;
-  border: 10px solid var(--bg);
-  animation: loadIn 1.4s .5s var(--ease) both;
-}
 .about-hero__badge {
   position: absolute; z-index: 3; top: calc(var(--header-h) + 8%); left: clamp(-70px, -4vw, -50px);
   width: 128px; height: 128px; border-radius: 50%; background: var(--bg);
@@ -584,7 +578,6 @@ table.sizes-table { width: 100%; border-collapse: collapse; font-size: 13px; mar
   .about-hero { grid-template-columns: 1fr; min-height: 0; }
   .about-hero__media { order: -1; height: 78svh; min-height: 480px; }
   .about-hero__copy { padding: 56px var(--gutter) 72px; }
-  .about-hero__inset { left: auto; right: var(--gutter); bottom: -56px; width: 150px; }
   .about-hero__badge { top: auto; bottom: -48px; left: var(--gutter); width: 104px; height: 104px; }
   .scroll-cue { display: none; }
   .story { grid-template-columns: 1fr; }
@@ -621,7 +614,6 @@ table.sizes-table { width: 100%; border-collapse: collapse; font-size: 13px; mar
   .carousel__nav { display: none; }
   .split { grid-template-columns: 1fr; }
   .about-hero__media { height: 72svh; min-height: 420px; }
-  .about-hero__inset { width: 112px; border-width: 6px; bottom: -40px; }
   .about-hero__badge { width: 88px; height: 88px; bottom: -40px; }
   .about-hero__copy { padding-top: 64px; }
   .about-hero__facts { gap: 12px; margin-top: 40px; }

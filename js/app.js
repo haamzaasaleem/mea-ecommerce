@@ -162,7 +162,7 @@
           <div>
             <h4>Contact Us</h4>
             <address>
-              <strong>Studio:</strong> DHA Phase 6, Lahore, Pakistan<br>
+              <strong>Studio:</strong> Visits by appointment<br>
               <strong>Phone:</strong> +92 300 0000000<br>
               <strong>Email:</strong> hello@mea.pk<br>
               <strong>Hours:</strong> Mon – Sat, 10am – 6pm PKT
@@ -478,7 +478,7 @@
     const j = [
       ["mallow-set", 1, "Atelier Notes", "How we choose a fabric: the karandi story", "From loom to last stitch, the slow process behind our most-loved weave."],
       ["gold-topaz-french-velvet-scallop-set", 3, "Styling", "Five ways to wear velvet beyond the wedding season", "Velvet isn't only for formal nights. Here's how we style it for every day."],
-      ["cloud-dancer-harper-set", 0, "Behind the Scenes", "Winter '26: on set in Lahore", "A look back at the shoot, the women who wore it, and the light we chased."],
+      ["cloud-dancer-harper-set", 0, "Behind the Scenes", "Winter '26: behind the lens", "A look back at the shoot, the women who wore it, and the light we chased."],
     ];
     $("#journalTrack").innerHTML = j.map(([id, n, k, t, d]) => `<a class="reveal" href="#" data-toast="The journal is added at launch."><div class="card__media" style="aspect-ratio:4/5"><img src="${img(id, n)}" alt="" loading="lazy"></div>
       <div style="padding-top:18px"><span class="eyebrow">${k}</span><h3 style="font-family:var(--serif);font-size:24px;line-height:1.2;margin:10px 0 10px">${t}</h3><p style="color:var(--muted);margin:0 0 14px;font-size:14px">${d}</p><span class="link-underline">Read more</span></div></a>`).join("");
