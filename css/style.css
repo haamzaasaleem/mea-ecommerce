@@ -648,3 +648,30 @@ table.sizes-table { width: 100%; border-collapse: collapse; font-size: 13px; mar
 .toolbar, .gallery { transition: top .4s var(--ease); }
 .header-hidden .toolbar { top: 0; }
 @media (min-width: 861px) { .header-hidden .gallery { top: 20px; } }
+
+/* ---------- Small-screen hardening ---------- */
+.section__head { flex-wrap: wrap; row-gap: 18px; }
+.footer__grid > *, .toolbar__inner > * { min-width: 0; }
+.newsletter input { width: 0; }
+.toolbar select { max-width: 100%; min-width: 0; text-overflow: ellipsis; }
+.pdp__label button { padding: 10px 0 6px; }
+.view-toggle button { height: 32px; align-items: center; padding: 0 4px; }
+.mega__links a, .footer li a { display: inline-block; padding: 2px 0; }
+@media (max-width: 400px) {
+  .section__head .btn { padding: 0 12px; letter-spacing: .16em; }
+  .about-hero__facts { grid-template-columns: 1fr 1fr; }
+  .about-hero__facts li:last-child { grid-column: 1 / -1; }
+  .about-hero__cta { gap: 22px; }
+  .toolbar__inner > * { padding: 0 10px; letter-spacing: .14em; }
+  .header__actions { gap: 12px; }
+}
+/* landscape phones: keep the hero photo within the screen */
+@media (max-width: 1100px) and (orientation: landscape) and (max-height: 560px) {
+  .about-hero__media { height: 88svh; min-height: 0; }
+  .campaign { height: 100svh; min-height: 0; }
+}
+/* very wide screens: give the hero copy room to breathe */
+@media (min-width: 1800px) {
+  .about-hero { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
+}
+.header--overlay:not(.is-solid) .currency { color: var(--text); text-shadow: 0 1px 8px rgba(0,0,0,.5); }
