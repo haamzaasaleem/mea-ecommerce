@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d0b09">
+<link rel="icon" href="assets/img/mea-logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<title>MEA | Everyday Wear Made to Turn Heads</title>
+<meta name="description" content="MEA: everyday wear made to turn heads. Co-ord sets, kurtas and evening wear in karandi, velvet, twill and crepe. Made in Pakistan.">
+</head>
+<body data-page="home" class="has-hero">
+<main>
+  <section class="hero" id="hero" aria-label="Featured collections"></section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <div><span class="eyebrow">Winter '26</span><h2 class="title">New Arrivals</h2></div>
+        <a class="btn" href="shop.html?c=new">View all</a>
+      </div>
+      <div class="grid" id="newGrid"></div>
+    </div>
+  </section>
+
+  <section class="section section--border" style="padding-top:0">
+    <div class="band" aria-hidden="true"><div class="band__track">
+      <span>Karandi</span><span>made to turn heads</span><span>Velvet</span><span>everyday wear</span><span>Twill</span><span>made to turn heads</span><span>Crepe</span><span>everyday wear</span>
+      <span>Karandi</span><span>made to turn heads</span><span>Velvet</span><span>everyday wear</span><span>Twill</span><span>made to turn heads</span><span>Crepe</span><span>everyday wear</span>
+    </div></div>
+    <div class="container" style="padding-top:clamp(64px,9vw,120px)">
+      <div class="section__head">
+        <div><span class="eyebrow">Shop by</span><h2 class="title">Fabrics</h2></div>
+        <div class="carousel__nav" data-carousel-nav="fabrics"><button type="button" class="arrow" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M20 12H4m6-6-6 6 6 6"/></svg></button><button type="button" class="arrow" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button></div>
+      </div>
+      <div class="carousel carousel--3" data-carousel="fabrics"><div class="carousel__track" id="fabricTrack"></div></div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section__head">
+        <div><span class="eyebrow">Shop by</span><h2 class="title">Occasion</h2></div>
+        <a class="btn" href="shop.html">Shop all</a>
+      </div>
+      <div class="split" id="split"></div>
+    </div>
+  </section>
+
+  <section class="editorial" id="atelier">
+    <div class="editorial__media" id="editorialMedia"></div>
+    <div class="editorial__copy reveal">
+      <span class="eyebrow">At the Atelier</span>
+      <h2 class="display">Made for <span class="italic">her</span>,<br>every day</h2>
+      <p>MEA started with a simple belief: the clothes you wear on an ordinary Tuesday deserve the same care as the ones you save for a wedding. Every piece is cut, stitched and finished in our Lahore atelier, in small batches, in fabrics we'd wear ourselves.</p>
+      <div class="signature">With love, the MEA studio</div>
+      <div><a class="btn" href="shop.html">Discover the collection</a></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <div><span class="eyebrow">Most loved</span><h2 class="title">Best Sellers</h2></div>
+        <div style="display:flex;gap:16px;align-items:center">
+          <a class="btn" href="shop.html?c=bestseller">View all</a>
+          <div class="carousel__nav" data-carousel-nav="best"><button type="button" class="arrow" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M20 12H4m6-6-6 6 6 6"/></svg></button><button type="button" class="arrow" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button></div>
+        </div>
+      </div>
+      <div class="carousel" data-carousel="best"><div class="carousel__track" id="bestTrack"></div></div>
+    </div>
+  </section>
+
+  <section class="section section--border" style="padding-top:0">
+    <div class="container">
+      <div class="section__head" style="border-top:1px solid var(--line);padding-top:clamp(64px,9vw,120px)">
+        <div><span class="eyebrow">#WearingMEA</span><h2 class="title">As Seen On</h2></div>
+        <a class="btn" href="#" data-toast="Links to the brand's Instagram at launch.">Follow @mea.official</a>
+      </div>
+      <div class="seen" id="seen"></div>
+    </div>
+  </section>
+
+  <section class="section" id="journal" style="padding-top:0">
+    <div class="container">
+      <div class="section__head">
+        <div><span class="eyebrow">Stories</span><h2 class="title">In the Journal</h2></div>
+        <a class="btn" href="#" data-toast="The journal is added at launch.">Visit journal</a>
+      </div>
+      <div class="grid grid--3" id="journalTrack"></div>
+    </div>
+  </section>
+</main>
+<script src="js/logo.js"></script>
+<script src="js/products.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

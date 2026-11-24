@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d0b09">
+<link rel="icon" href="assets/img/mea-logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<title>Shop | MEA</title>
+<meta name="description" content="Shop MEA co-ord sets, kurtas and evening wear.">
+</head>
+<body data-page="shop">
+<main>
+  <section class="page-banner">
+    <img id="bannerImg" src="" alt="">
+    <div class="page-banner__copy">
+      <nav class="crumbs"><a href="index.html">Home</a><span>/</span><span id="bannerCrumb" style="margin:0">Shop</span></nav>
+      <h1 class="display" id="bannerTitle">Shop All</h1>
+      <p id="bannerText"></p>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <div class="container toolbar__inner" style="padding:0">
+      <button type="button" data-open="filters"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Filters <span id="filterCount"></span></button>
+      <label><span class="sr-only">Sort by</span>
+        <select id="sort">
+          <option value="featured">Featured</option>
+          <option value="newest">Newest</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+          <option value="az">Alphabetical</option>
+        </select>
+      </label>
+      <div class="toolbar__count" id="count"></div>
+      <div class="view-toggle">
+        <button type="button" data-cols="2" aria-label="2 columns"><i></i><i></i></button>
+        <button type="button" data-cols="3" aria-label="3 columns"><i></i><i></i><i></i></button>
+        <button type="button" data-cols="4" aria-label="4 columns"><i></i><i></i><i></i><i></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="collection-tabs" id="tabs"></div>
+    <div class="chips-row" id="activeChips"></div>
+    <div class="shop-grid">
+      <div id="shopGrid" class="grid"></div>
+      <div class="empty-state" id="empty" hidden><p>Nothing matches those filters.</p><button type="button" class="btn" id="resetAll">Clear filters</button></div>
+    </div>
+  </div>
+</main>
+<script src="js/logo.js"></script>
+<script src="js/products.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
