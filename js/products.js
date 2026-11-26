@@ -12,10 +12,13 @@
      { "name": "Pants size", "type": "size",   "guide": "pants", "values": ["XS", "S", "M"] }
      { "name": "Fabric",     "type": "fabric", "values": ["Karandi", { "label": "Raw Silk", "add": 4000 }] }
      { "name": "Dupatta",    "type": "choice", "values": ["Without dupatta", { "label": "With dupatta", "add": 7000 }] }
+     { "name": "Shirt length", "type": "length", "values": ["42", "44", { "label": "48", "note": "Standard", "default": true }] }
 
    - "type": "size" shows small size boxes, "fabric" and "choice" show wider buttons.
    - "guide" adds a Size guide link that opens the shirt or pants chart.
-   - A value can be plain text, or { "label": ..., "add": extra price in Rs. }.
+   - "type": "length" shows length boxes; lengths are in inches.
+   - A value can be plain text, or { "label": ..., "add": extra price in Rs.,
+     "note": small text under the button, "default": true to pre-select it }.
    ========================================================= */
 window.MEA_PRODUCTS = [
  {
@@ -48,6 +51,34 @@ window.MEA_PRODUCTS = [
      "M/L",
      "L",
      "XL"
+    ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
     ]
    }
   ],
@@ -100,6 +131,34 @@ window.MEA_PRODUCTS = [
      "L",
      "XL"
     ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
+    ]
    }
   ],
   "tags": [
@@ -150,6 +209,34 @@ window.MEA_PRODUCTS = [
      "M/L",
      "L",
      "XL"
+    ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
     ]
    },
    {
@@ -212,6 +299,34 @@ window.MEA_PRODUCTS = [
     ]
    },
    {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
+    ]
+   },
+   {
     "name": "Fabric",
     "type": "fabric",
     "values": [
@@ -266,6 +381,34 @@ window.MEA_PRODUCTS = [
      "M/L",
      "L",
      "XL"
+    ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
     ]
    },
    {
@@ -329,6 +472,34 @@ window.MEA_PRODUCTS = [
     ]
    },
    {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
+    ]
+   },
+   {
     "name": "Fabric",
     "type": "fabric",
     "values": [
@@ -386,6 +557,34 @@ window.MEA_PRODUCTS = [
      "L",
      "XL"
     ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
+    ]
    }
   ],
   "tags": [
@@ -434,6 +633,34 @@ window.MEA_PRODUCTS = [
      "M/L",
      "L",
      "XL"
+    ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
     ]
    },
    {
@@ -514,6 +741,34 @@ window.MEA_PRODUCTS = [
       "add": 15000
      }
     ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
+    ]
    }
   ],
   "tags": [
@@ -562,6 +817,34 @@ window.MEA_PRODUCTS = [
      "M/L",
      "L",
      "XL"
+    ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
     ]
    },
    {
@@ -626,6 +909,34 @@ window.MEA_PRODUCTS = [
     ]
    },
    {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
+    ]
+   },
+   {
     "name": "Dupatta",
     "type": "choice",
     "values": [
@@ -684,6 +995,34 @@ window.MEA_PRODUCTS = [
      "M/L",
      "L",
      "XL"
+    ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
     ]
    },
    {
@@ -758,6 +1097,34 @@ window.MEA_PRODUCTS = [
      "L",
      "XL"
     ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
+    ]
    }
   ],
   "tags": [
@@ -806,6 +1173,34 @@ window.MEA_PRODUCTS = [
      "M/L",
      "L",
      "XL"
+    ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
     ]
    },
    {
@@ -903,6 +1298,34 @@ window.MEA_PRODUCTS = [
      "L",
      "XL"
     ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
+    ]
    }
   ],
   "tags": [
@@ -989,6 +1412,34 @@ window.MEA_PRODUCTS = [
      "L",
      "XL"
     ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
+    ]
    }
   ],
   "tags": [
@@ -1038,6 +1489,34 @@ window.MEA_PRODUCTS = [
      "L",
      "XL"
     ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
+    ]
    }
   ],
   "tags": [
@@ -1084,6 +1563,34 @@ window.MEA_PRODUCTS = [
      "M",
      "L",
      "XL"
+    ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
     ]
    },
    {
@@ -1212,6 +1719,34 @@ window.MEA_PRODUCTS = [
     ]
    },
    {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
+    ]
+   },
+   {
     "name": "Fabric",
     "type": "fabric",
     "values": [
@@ -1271,6 +1806,34 @@ window.MEA_PRODUCTS = [
      "L",
      "XL"
     ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
+    ]
    }
   ],
   "tags": [
@@ -1319,6 +1882,34 @@ window.MEA_PRODUCTS = [
      "M",
      "L",
      "XL"
+    ]
+   },
+   {
+    "name": "Shirt length",
+    "type": "length",
+    "values": [
+     "42",
+     "44",
+     "46",
+     {
+      "label": "48",
+      "note": "Standard",
+      "default": true
+     }
+    ]
+   },
+   {
+    "name": "Pants length",
+    "type": "length",
+    "values": [
+     "32",
+     "34",
+     {
+      "label": "36",
+      "note": "Standard",
+      "default": true
+     },
+     "38"
     ]
    },
    {

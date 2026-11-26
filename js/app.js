@@ -45,7 +45,9 @@
 
   /* ---------- product options ---------- */
   // a value is "M" or { label: "Raw Silk", add: 4000 }
-  const optVal = (v) => (typeof v === "string" ? { label: v, add: 0 } : { label: v.label, add: v.add || 0 });
+  const optVal = (v) => (typeof v === "string"
+    ? { label: v, add: 0, note: "", def: false }
+    : { label: v.label, add: v.add || 0, note: v.note || "", def: !!v.default });
   const addOn = (p, sel) => (p.options || []).reduce((sum, o) => {
     const v = o.values.map(optVal).find((x) => x.label === sel[o.name]);
     return sum + (v ? v.add : 0);
@@ -67,7 +69,7 @@
         ? `<div class="card__quick"><button type="button" class="card__quick-btn" data-add="${p.id}" data-sel="{}">Add to bag</button></div>`
         : single
           ? `<div class="card__quick"><small>Quick add</small><div class="card__sizes">${o[0].values.map(optVal).map((v) => `<button type="button" data-add="${p.id}" data-sel="${esc(JSON.stringify({ [o[0].name]: v.label }))}">${esc(v.label)}</button>`).join("")}</div></div>`
-          : `<div class="card__quick"><a class="card__quick-btn" href="product.html?id=${p.id}">Choose ${esc(o.map((x) => x.name.replace(/ size$/i, "").toLowerCase()).join(", ").replace(/, ([^,]*)$/, " & $1"))}</a></div>`;
+          : `<div class="card__quick"><a class="card__quick-btn" href="product.html?id=${p.id}">Choose ${esc(o.filter((x) => x.type !== "length").map((x) => x.name.replace(/ size$/i, "").toLowerCase()).join(", ").replace(/, ([^,]*)$/, " & $1"))}</a></div>`;
     return `<article class="card${p.available ? "" : " is-soldout"}${opts.reveal === false ? "" : " reveal"}">
       <div class="card__frame"><a class="card__media" href="product.html?id=${p.id}" aria-label="${esc(p.title)}">
         <img src="${p.images[0]}" alt="${esc(p.title)}" loading="lazy">${alt}${badge}
@@ -208,7 +210,7 @@
     <a class="whatsapp" href="https://wa.me/${WHATSAPP}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">${ICON.wa}</a>
     <div class="modal" id="sizeModal" aria-hidden="true"><div class="modal__backdrop" data-close></div><div class="modal__box" data-lenis-prevent role="dialog" aria-label="Size guide">
       <button class="icon-btn modal__close" data-close aria-label="Close">${ICON.close}</button>
-      <h3>Size Guide</h3><p class="note">All measurements are in inches, taken flat. Lengths may vary by style.</p>
+      <h3>Size Guide</h3><p class="note">All measurements are in inches, taken flat. Shirt length is measured from shoulder to hem, pants length from waist to hem. Standard lengths are pre-selected; pick another length if you need it shorter or longer.</p>
       <div class="guide-tabs" role="tablist"><button type="button" role="tab" data-guide="shirt" class="is-active">Shirt</button><button type="button" role="tab" data-guide="pants">Pants</button></div>
       <div class="table-wrap" data-chart="shirt"><table class="sizes-table"><thead><tr><th>Size</th><th>Shoulder</th><th>Bust</th><th>Waist</th><th>Hip</th><th>Length</th></tr></thead><tbody>
         <tr><td>XS</td><td>13.5</td><td>18</td><td>16</td><td>19</td><td>44</td></tr>
@@ -652,7 +654,7 @@
         ${p.options.map((o, gi) => `
         <div class="opt" data-g="${gi}">
           <div class="pdp__label"><span>${esc(o.name)}: <b class="opt__sel">Select</b></span>${o.guide ? `<button type="button" data-open="sizeModal" data-guide="${o.guide}">Size guide</button>` : ""}</div>
-          <div class="${o.type === "size" ? "sizes" : "opt-choices"}">${o.values.map(optVal).map((v) => `<button type="button" data-v="${esc(v.label)}">${esc(v.label)}${v.add && o.type !== "size" ? `<small>+ ${money(v.add)}</small>` : ""}</button>`).join("")}</div>
+          <div class="${o.type === "size" ? "sizes" : o.type === "length" ? "sizes lengths" : "opt-choices"}">${o.values.map(optVal).map((v) => `<button type="button" data-v="${esc(v.label)}">${esc(v.label)}${o.type === "length" && v.note ? `<small>${esc(v.note)}</small>` : ""}${v.add && o.type !== "size" && o.type !== "length" ? `<small>+ ${money(v.add)}</small>` : ""}</button>`).join("")}</div>
         </div>`).join("")}
         <div class="pdp__buy">
           <div class="qty"><button type="button" id="qMinus" aria-label="Decrease">−</button><span id="qVal">1</span><button type="button" id="qPlus" aria-label="Increase">+</button></div>
@@ -700,20 +702,26 @@
     const refresh = () => {
       const extra = addOn(p, sel), now = p.price + extra;
       $("#pdpPrice").innerHTML = p.compare ? `<span class="sale">${money(now)}</span><s>${money(p.compare + extra)}</s>` : money(now);
-      const chosen = Object.keys(sel).length ? ` (${optText(sel)})` : "";
+      const ordered = Object.fromEntries(p.options.filter((o) => sel[o.name]).map((o) => [o.name, sel[o.name]]));
+      const chosen = Object.keys(ordered).length ? ` (${optText(ordered)})` : "";
       $("#waBtn").href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hi MEA, I'd like to order the ${p.title}${chosen}, quantity ${qty}.`)}`;
       if ($("#addBtn")) $("#addBtn").textContent = `Add to bag · ${money(now * qty)}`;
     };
     if (p.available) {
-      $$(".opt").forEach((g) => g.addEventListener("click", (e) => {
-        const b = e.target.closest("button[data-v]"); if (!b) return;
+      const choose = (g, b) => {
         const o = p.options[+g.dataset.g], v = o.values.map(optVal).find((x) => x.label === b.dataset.v);
         sel[o.name] = v.label;
         $$("button[data-v]", g).forEach((x) => x.classList.toggle("is-active", x === b));
-        $(".opt__sel", g).textContent = v.label + (v.add ? ` (+ ${money(v.add)})` : "");
+        $(".opt__sel", g).textContent = v.label + (v.note ? ` (${v.note})` : "") + (v.add ? ` (+ ${money(v.add)})` : "");
         g.classList.remove("is-missing");
         refresh();
-      }));
+      };
+      $$(".opt").forEach((g) => {
+        g.addEventListener("click", (e) => { const b = e.target.closest("button[data-v]"); if (b) choose(g, b); });
+        // pre-select defaults such as the standard shirt / pants length
+        const def = p.options[+g.dataset.g].values.map(optVal).find((v) => v.def);
+        if (def) choose(g, $$("button[data-v]", g).find((b) => b.dataset.v === def.label));
+      });
       const setQ = (n) => { qty = Math.max(1, Math.min(10, n)); $("#qVal").textContent = qty; refresh(); };
       $("#qMinus").onclick = () => setQ(qty - 1);
       $("#qPlus").onclick = () => setQ(qty + 1);

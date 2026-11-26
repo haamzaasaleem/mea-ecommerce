@@ -690,3 +690,6 @@ table.sizes-table { width: 100%; border-collapse: collapse; font-size: 13px; mar
 .guide-tabs button.is-active { color: var(--text); border-color: var(--accent); }
 .card__quick-btn { display: block; width: 100%; padding: 8px 4px; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; transition: color .3s; }
 .card__quick-btn:hover { color: var(--accent); }
+.lengths button { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; min-width: 64px; min-height: 48px; height: auto; padding: 6px 12px; }
+.lengths button small { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.lengths button.is-active small { color: rgba(13,11,9,.6); }

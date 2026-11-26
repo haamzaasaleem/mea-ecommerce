@@ -19,7 +19,7 @@ Then visit http://localhost:8000.
 | --- | --- |
 | `index.html` | About MEA hero (no slideshow), New Arrivals grid, Shop by Fabric carousel, Winter Edit campaign banner, Best Sellers carousel, Our Story with Everyday/Evening tiles, As Seen On, Journal, service promises, footer with newsletter |
 | `shop.html` | Collection page: banner, sticky toolbar (filters drawer, sort, 2/3/4 column toggle), collection tabs. Supports `?c=new\|bestseller\|everyday\|evening` and `?fabric=Velvet` |
-| `product.html?id=…` | Gallery with thumbnails + hover zoom (swipe on mobile), per-product options (shirt size, pants size, fabric, dupatta, with price add-ons), quantity, add to bag, WhatsApp order with the chosen options, shirt & pants size guide, accordions, related products |
+| `product.html?id=…` | Gallery with thumbnails + hover zoom (swipe on mobile), per-product options (shirt size, pants size, shirt length, pants length with the standard pre-selected, fabric, dupatta, with price add-ons), quantity, add to bag, WhatsApp order with the chosen options, shirt & pants size guide, accordions, related products |
 
 Shared on every page: announcement marquee, mega menu, mobile menu, live search, cart drawer (saved in localStorage) with a free-delivery meter, WhatsApp button.
 
